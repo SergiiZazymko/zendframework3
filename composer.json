@@ -40,5 +40,8 @@
         ],
         "serve": "php -S 0.0.0.0:5555 -t public public/index.php",
         "test": "phpunit"
+    },
+    "require-dev": {
+        "zendframework/zend-developer-tools": "^1.2"
     }
 }
