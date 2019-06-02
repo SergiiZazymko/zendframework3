@@ -1,0 +1,11 @@
+<?php $this->headTitle('About'); ?>
+<p>
+    The Hello World application.
+</p>
+<p>
+    Application name: <?= $this->escapeHtml($appName); ?>
+</p>
+<p>
+    Application description: <?= $this->escapeHtml($appDescription); ?>.
+</p>
+<?php var_dump($this->params()->fromQuery()); ?>

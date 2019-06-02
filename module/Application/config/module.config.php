@@ -7,6 +7,7 @@
 
 namespace Application;
 
+use Zend\Mvc\Controller\LazyControllerAbstractFactory;
 use Zend\Router\Http\Literal;
 use Zend\Router\Http\Segment;
 use Zend\ServiceManager\Factory\InvokableFactory;
@@ -38,7 +39,30 @@ return [
     ],
     'controllers' => [
         'factories' => [
-            Controller\IndexController::class => InvokableFactory::class,
+            //Controller\IndexController::class => InvokableFactory::class,
+            //Controller\IndexController::class => Controller\IndexControllerFactory::class,
+            Controller\IndexController::class => LazyControllerAbstractFactory::class,
+        ],
+    ],
+    'controller_plugins' => [
+        'factories' => [
+            Controller\Plugin\AccessPlugin::class => InvokableFactory::class,
+        ],
+        'aliases' => [
+            'accessPlugin' => Controller\Plugin\AccessPlugin::class,
+        ],
+    ],
+    'service_manager' => [
+        'factories' => [
+            Service\CurrencyConverter::class => InvokableFactory::class,
+        ],
+    ],
+    'view_helpers' => [
+        'factories' => [
+            ViewHelper\Params::class => Factory\ParamsFactory::class,
+        ],
+        'aliases' => [
+            'params' => ViewHelper\Params::class,
         ],
     ],
     'view_manager' => [
