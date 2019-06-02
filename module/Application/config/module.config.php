@@ -35,6 +35,16 @@ return [
                     ],
                 ],
             ],
+            'download' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/download[/:action]',
+                    'defaults' => [
+                        'controller' => Controller\DownloadController::class,
+                        'action'     => 'index',
+                    ],
+                ],
+            ],
         ],
     ],
     'controllers' => [
@@ -42,6 +52,7 @@ return [
             //Controller\IndexController::class => InvokableFactory::class,
             //Controller\IndexController::class => Controller\IndexControllerFactory::class,
             Controller\IndexController::class => LazyControllerAbstractFactory::class,
+            Controller\DownloadController::class => InvokableFactory::class,
         ],
     ],
     'controller_plugins' => [
