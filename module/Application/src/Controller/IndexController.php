@@ -11,6 +11,7 @@ use Application\Service\CurrencyConverter;
 use Zend\Http\Response;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Mvc\MvcEvent;
+use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -48,8 +49,10 @@ class IndexController extends AbstractActionController
     {
         var_dump($this->accessPlugin()->checkAccess('f'));
 
+        throw new \Exception();
+
         //var_dump($this->currencyConverter);die;
-        return new ViewModel();
+        return new ViewModel;
     }
 
     /**
@@ -79,5 +82,20 @@ class IndexController extends AbstractActionController
 
         $response->setStatusCode(500);
         return;
+    }
+
+    /**
+     * @return JsonModel
+     */
+    public function getJsonAction()
+    {
+        return new JsonModel([
+            'status' => 'SUCCESS',
+            'message'=>'Here is your data',
+            'data' => [
+                'full_name' => 'John Doe',
+                'address' => '51 Middle st.'
+            ],
+        ]);
     }
 }
