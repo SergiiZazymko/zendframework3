@@ -6,7 +6,7 @@
  * Time: 13:41
  */
 
-namespace Application\ViewHelper;
+namespace Application\View\Helper;
 
 use Zend\Http\Request;
 use Zend\View\Helper\AbstractHelper;

@@ -6,9 +6,9 @@
  * Time: 13:48
  */
 
-namespace Application\Factory;
+namespace Application\View\Helper\Factory;
 
-use Application\ViewHelper\Params;
+use Application\View\Helper\Params;
 use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\Factory\FactoryInterface;
 

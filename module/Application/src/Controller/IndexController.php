@@ -49,7 +49,7 @@ class IndexController extends AbstractActionController
     {
         var_dump($this->accessPlugin()->checkAccess('f'));
 
-        throw new \Exception();
+//        throw new \Exception();
 
         //var_dump($this->currencyConverter);die;
         return new ViewModel;

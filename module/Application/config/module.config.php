@@ -70,10 +70,10 @@ return [
     ],
     'view_helpers' => [
         'factories' => [
-            ViewHelper\Params::class => Factory\ParamsFactory::class,
+            View\Helper\Params::class => View\Helper\Factory\ParamsFactory::class,
         ],
         'aliases' => [
-            'params' => ViewHelper\Params::class,
+            'params' => View\Helper\Params::class,
         ],
     ],
     'view_manager' => [

@@ -6,7 +6,7 @@
  * Time: 20:40
  */
 
-namespace Application\Factory;
+namespace Application\Controller\Factory;
 
 use Application\Controller\IndexController;
 use Application\Service\CurrencyConverter;
