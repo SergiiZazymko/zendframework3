@@ -8,6 +8,8 @@
 namespace Application\Controller;
 
 use Application\Service\CurrencyConverter;
+use Zend\Barcode\Barcode;
+use Zend\Barcode\Renderer\Image;
 use Zend\Http\Response;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Mvc\MvcEvent;
@@ -97,5 +99,60 @@ class IndexController extends AbstractActionController
                 'address' => '51 Middle st.'
             ],
         ]);
+    }
+
+    /**
+     * @return \Zend\Stdlib\ResponseInterface
+     */
+    public function barcodeAction()
+    {
+        /** @var string $type */
+        $type = $this->params()->fromRoute('type', 'code39');
+
+        /** @var string $label */
+        $label = $this->params()->fromRoute('label', '1235413254234');
+
+        /** @var Image $barcode */
+        $barcode = Barcode::factory(
+            $type,
+            'image',
+            [
+                'text' => $label,
+            ],
+            []
+        );
+
+        $barcode->render();
+
+        return $this->getResponse();
+    }
+
+    /**
+     * @return ViewModel
+     */
+    public function docAction()
+    {
+        //var_dump($this->getEvent()->getRouteMatch()->getMatchedRouteName());
+        var_dump($this->getEvent()->getRouter());
+
+        /** @var string $page */
+        $page = $this->params()->fromRoute('page', 'docmentation');
+
+        /** @var string $template */
+        $template = 'application/index' . $page . '.phtml';
+
+        /** @var string $fileName */
+        $fileName = realpath(__DIR__ . '/../../view/' . $template);
+
+        if (!is_file($fileName) || !is_readable($fileName)) {
+            $this->getResponse()->setStatusCode(404);
+            return;
+        }
+
+        /** @var ViewModel $viewModel */
+        $viewModel = new ViewModel;
+        $viewModel->setTemplate($template);
+
+        return $viewModel;
     }
 }

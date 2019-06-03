@@ -9,11 +9,17 @@ namespace Application;
 
 use Zend\Mvc\Controller\LazyControllerAbstractFactory;
 use Zend\Router\Http\Literal;
+use Zend\Router\Http\Regex;
 use Zend\Router\Http\Segment;
+use Zend\Router\Http\TreeRouteStack;
 use Zend\ServiceManager\Factory\InvokableFactory;
 
 return [
     'router' => [
+        'router_class' => TreeRouteStack::class,
+        'default_params' => [
+            // Укажите параметры по умолчанию для всех маршрутов ...
+        ],
         'routes' => [
             'home' => [
                 'type' => Literal::class,
@@ -22,6 +28,16 @@ return [
                     'defaults' => [
                         'controller' => Controller\IndexController::class,
                         'action'     => 'index',
+                    ],
+                ],
+            ],
+            'about' => [
+                'type' => Literal::class,
+                'options' => [
+                    'route'    => '/about',
+                    'defaults' => [
+                        'controller' => Controller\IndexController::class,
+                        'action'     => 'about',
                     ],
                 ],
             ],
@@ -35,6 +51,20 @@ return [
                     ],
                 ],
             ],
+            'barcode' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/barcode[/:type/:label]',
+                    'constraings' => [
+                        'type' => '[A-Za-z]\\w*',
+                        'label' => '\\w*',
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\IndexController::class,
+                        'action'     => 'barcode',
+                    ],
+                ],
+            ],
             'download' => [
                 'type'    => Segment::class,
                 'options' => [
@@ -43,6 +73,17 @@ return [
                         'controller' => Controller\DownloadController::class,
                         'action'     => 'index',
                     ],
+                ],
+            ],
+            'doc' => [
+                'type' => Regex::class,
+                'options' => [
+                    'regex'    => '/doc(?<page>\/\\w+)',
+                    'defaults' => [
+                        'controller' => Controller\IndexController::class,
+                        'action'     => 'doc',
+                    ],
+                    'spec'=>'/doc/%page%'
                 ],
             ],
         ],
