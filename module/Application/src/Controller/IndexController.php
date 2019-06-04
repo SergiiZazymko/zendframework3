@@ -7,6 +7,7 @@
 
 namespace Application\Controller;
 
+use Application\Route\StaticRoute;
 use Application\Service\CurrencyConverter;
 use Zend\Barcode\Barcode;
 use Zend\Barcode\Renderer\Image;
@@ -49,6 +50,15 @@ class IndexController extends AbstractActionController
      */
     public function indexAction()
     {
+        $staticRoute = StaticRoute::factory([
+            'dir_name' => 'fff',
+            'template_prefix' => 'fff',
+            'filename_pattern' => 'fff',
+            'defaults' => ['fff'],
+
+        ]);
+        var_dump($staticRoute);die;
+
         var_dump($this->accessPlugin()->checkAccess('f'));
 
 //        throw new \Exception();
