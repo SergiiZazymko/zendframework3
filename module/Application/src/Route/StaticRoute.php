@@ -11,8 +11,10 @@ namespace Application\Route;
 use Traversable;
 use Zend\Router\Exception\InvalidArgumentException;
 use Zend\Router\RouteInterface;
+use Zend\Router\RouteMatch;
 use Zend\Stdlib\ArrayUtils;
 use Zend\Stdlib\RequestInterface as Request;
+use Zend\Uri\Uri;
 
 /**
  * Class StaticRoute
@@ -86,16 +88,95 @@ class StaticRoute implements RouteInterface
         );
     }
 
-    public function match(Request $request)
+    /**
+     * @param Request $request
+     * @param null $pathOffset
+     * @return RouteMatch|null
+     */
+    public function match(Request $request, $pathOffset = null)
     {
+        if (!method_exists($request, 'getUri')) {
+            return null;
+        }
+
+        /** @var Uri $uri */
+        $uri = $request->getUri();
+
+        /** @var string $path */
+        $path = $uri->getPath();
+        $path = $pathOffset ? substr($path, $pathOffset) : $path;
+
+        /** @var array $segments */
+        $segments = explode('/', $path);
+
+        /** @var string $segment */
+        foreach ($segments as $segment) {
+            if (!strlen($segment)) {
+                continue;
+            }
+
+            if (!preg_match($this->fileNamePattern, $segment)) {
+                return null;
+            }
+        }
+
+        /** @var string $fileName */
+        $fileName = $this->dirName . DIRECTORY_SEPARATOR . $this->templatePrefix . $path . '.phtml';
+
+        if (!is_file($fileName) || !is_readable($fileName)) {
+            return null;
+        }
+
+        /** @var int $matchedLength */
+        $matchedLength = strlen($path);
+
+        return new RouteMatch(
+            ArrayUtils::merge($this->defaults, ['page' => $this->templatePrefix . $path]),
+            $matchedLength
+        );
     }
 
+    /**
+     * @param array $params
+     * @param array $options
+     * @return mixed|string
+     */
     public function assemble(array $params = [], array $options = [])
     {
+        /** @var array $mergedParams */
+        $mergedParams = ArrayUtils::merge($this->defaults, $params);
+
+        $this->assembledParams = [];
+
+        if (!isset($params['page'])) {
+            throw new InvalidArgumentException(__METHOD__ .  ' expects the "page" parameter');
+        }
+
+        /** @var array $segments */
+        $segments = explode('/', $params['page']);
+
+        /** @var string $url */
+        $url = '';
+
+        /** @var string $segment */
+        foreach($segments as $segment) {
+            if(strlen($segment)==0) {
+                continue;
+            }
+
+            $url .= '/' . rawurlencode($segment);
+        }
+
+        $this->assembledParams[] = 'page';
+
+        return $url;
     }
 
+    /**
+     * @return array
+     */
     public function getAssembledParams()
     {
-        
+        return $this->assembledParams;
     }
 }
